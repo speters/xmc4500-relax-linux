@@ -36,7 +36,5 @@ Getting J-Link Tools
 -------------------------
 
 You need to provide your serial number to download the J-Link Tools.
-To get them, you can connect your board to a windows pc and install
-the DAVE supplied J-Link package. After opening J-Link Commander you
-will see the serial number in the command window.
-
+To get the serial, attach the development board to your computer and type dmesg or use
+ lsusb -d 1366:0101 -v | grep -i serial
