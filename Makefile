@@ -2,7 +2,7 @@ TARGET = blink
 
 #### Setup ####
 #CMSIS         = /YOUR/PATH/TO/CMSIS
-CMSIS = /home/andy/exchange/workspace/CMSIS
+CMSIS = $(HOME)/tmp/dave3/DAVE-3.1.8.used/CMSIS
 SRC           = $(wildcard src/*.c)
 TOOLCHAIN     = arm-none-eabi
 UC            = XMC4500
