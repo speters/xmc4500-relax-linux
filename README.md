@@ -20,7 +20,7 @@ able find the System_XMD4500.c file. This seems to be a UNIX-only problem since
 windows-gcc is case-insensitive regarding filenames.
 
     cd CMSIS/Infineon/XMC4500_series/Source
-    mv system_XMC4500.c System_XMC4500.c
+    mv System_XMC4500.c system_XMC4500.c
 
 Usage
 -------------------------

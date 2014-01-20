@@ -2,7 +2,7 @@ TARGET = blink
 
 #### Setup ####
 #CMSIS         = /YOUR/PATH/TO/CMSIS
-CMSIS = $(HOME)/tmp/dave3/DAVE-3.1.8.used/CMSIS/
+CMSIS = ../CMSIS/
 SRC           = $(wildcard src/*.c)
 TOOLCHAIN     = arm-none-eabi
 UC            = XMC4500
@@ -10,7 +10,12 @@ UC_ID         = 4503
 CPU           = cortex-m4
 FPU           = fpv4-sp-d16
 FABI          = softfp
-LIBS          = -larm_cortexM4_mathL_2
+ifeq ($(FABI),softfp)
+	MATHLIB = arm_cortexM4l_math
+else
+	MATHLIB = arm_cortexM4lf_math
+endif
+LIBS          = -l$(MATHLIB)
 GDB_ARGS      = -ex "target remote :2331" -ex "monitor reset" -ex "load" -ex "set *0xe000ed08 = 0x10000000" -ex "monitor go"
 #GDB_ARGS      = -ex "target remote :2331" -ex "monitor reset" -ex "load" -ex "monitor reset" -ex "monitor go"
 TGDB_ARGS      = -ex "set mem inaccessible-by-default off" -ex "target remote :2331" \
@@ -27,8 +32,7 @@ TGDB_ARGS      = -ex "set mem inaccessible-by-default off" -ex "target remote :2
 JLINKARGS = -Device XMC4500-1024 -if SWD
 
 #LINKER_FILE = ./src/xmc4500.ld
-LINKER_FILE = $(CMSIS)/Infineon/$(UC)_series/Source/GCC/$(UC).ld
-CMSIS_SRC += $(CMSIS)/Infineon/$(UC)_series/Source/System_$(UC).c
+LINKER_FILE = $(CMSIS)/Device/Infineon/$(UC)_series/Source/GCC/$(UC).ld
 
 CC   = $(TOOLCHAIN)-gcc
 CP   = $(TOOLCHAIN)-objcopy
@@ -41,13 +45,15 @@ CFLAGS+= -O0 -ffunction-sections -fdata-sections
 CFLAGS+= -MD -std=c99 -Wall -fms-extensions
 CFLAGS+= -DUC_ID=$(UC_ID) -DARM_MATH_CM4
 CFLAGS+= -g3 -fmessage-length=0 -I$(CMSIS)/Include
-CFLAGS+= -I$(CMSIS)/Infineon/Include
-CFLAGS+= -I$(CMSIS)/Infineon/$(UC)_series/Include
-LFLAGS = -nostartfiles -L$(CMSIS)/Infineon/Lib -L$(CMSIS)/Lib/GCC -Wl,--gc-sections
+CFLAGS+= -I$(CMSIS)/Device/Infineon/Include
+CFLAGS+= -I$(CMSIS)/Device/Infineon/$(UC)_series/Include
+LFLAGS = -nostartfiles -L$(CMSIS)/Device/Infineon/Lib -L$(CMSIS)/Lib/GCC -Wl,--gc-sections
 CPFLAGS = -Obinary
 ODFLAGS = -S
 
-STARTUP = $(CMSIS)/Infineon/$(UC)_series/Source/GCC/startup_$(UC).s
+STARTUP = $(CMSIS)/Device/Infineon/$(UC)_series/Source/GCC/startup_$(UC).s
+CMSIS_SRC = $(CMSIS)/Device/Infineon/$(UC)_series/Source/System_$(UC).c
+# linker script includes xmclibcstubs.a, soure:$(CMSIS)/Device/Infineon/Source/GCC/System_LibcStubs.c
 
 OBJS  = $(SRC:.c=.o)
 OBJS += src/startup_$(UC).o

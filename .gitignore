@@ -1,4 +1,5 @@
 JLink.log
+bin/
 
 # Object files
 *.o
@@ -6,6 +7,9 @@ JLink.log
 # Libraries
 *.lib
 *.a
+
+*.d
+*.lst
 
 # Shared objects (inc. Windows DLLs)
 *.dll

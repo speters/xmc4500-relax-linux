@@ -12,7 +12,7 @@ static const uint32_t DURATION = 15;
 void SysTick_Handler(void) {
 	usTicks++;
 
-	curPos += 0.001;
+	curPos += 3* 0.001;
 	if(curPos > PI)
 		curPos = 0;
 }
